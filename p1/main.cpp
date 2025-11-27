@@ -1,13 +1,14 @@
 #include <iostream>
 #include <limits>
 #include <string>
+#include <string_view>
 #include <vector>
 #include <algorithm>
 
 
-void addStringToString(std::string& base, const std::string& num)
+void addStringToString(std::string& base, std::string_view num)
 {
-	std::string result;
+	std::string result{};
 	std::size_t i{ base.size() };
 	std::size_t j{ num.size() };
 	int carry{};
@@ -118,7 +119,7 @@ void factorialFunction()
 			case 'y':
 				break;
 			case 'n':
-				std::exit(0);
+				return;
 			default:
 				std::cout << "Invalid input. Try again.\n";
 				continue;
@@ -132,11 +133,6 @@ void factorialFunction()
 int main()
 {
 	factorialFunction();
-
+	
     return 0;
 }
-
-
-
-
-

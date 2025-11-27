@@ -98,7 +98,7 @@ void arraySumFunction()
 			case 'y':
 				break;
 			case 'n':
-				std::exit(0);
+				return;
 			default:
 				std::cout << "Invalid input. Try again.\n";
 				continue;
