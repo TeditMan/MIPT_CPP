@@ -88,10 +88,9 @@ void factorialFunction()
 
 		std::cout << "The factorial of this number is: " << calculateFactorial(number) << '\n';
 
-		char check{};
-		bool condition{true};
-		while (condition)
+		while (true)
 		{
+			char check{};
 			std::cout << "Do you want to continue? (y/n): ";
 			std::cin >> check;
 
@@ -117,13 +116,15 @@ void factorialFunction()
 			switch (check)
 			{
 			case 'y':
-				condition = false;
 				break;
 			case 'n':
 				std::exit(0);
 			default:
 				std::cout << "Invalid input. Try again.\n";
+				continue;
 			}
+
+			break;
 		}
 	}
 }
