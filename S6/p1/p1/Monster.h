@@ -1,6 +1,5 @@
 #pragma once
 #include <array>
-#include <vector>
 
 // Выбранный объект - противник в рамках какой-нибудь игры (например, Witcher 3)
 // Основной функционал - взаимодействие с игроком (нанесение урона, изменение состояния в зависимости от относительного расположения с игроком),
@@ -8,15 +7,20 @@
 
 // Несколько служебных классов для того, чтобы реализация методов имела какой-то смысл
 
+class Model
+{
+    int a{};
+};
+
 class modelsDirectory
 {
 public:
-    std::vector<Model> models{};
+    std::array<Model, 5> models{};
 };
 
 namespace Globals
 {
-    modelsDirectory mDirectory{};
+    inline modelsDirectory mDirectory{};
 }
 
 class Player
@@ -29,6 +33,11 @@ public:
     std::array<double, 3> getPos() const
     {
         return m_pos;
+    }
+
+    int getHealth() const
+    {
+        return m_health;
     }
 
     void changeHealth(int value, bool add)
@@ -52,6 +61,22 @@ private:
 
     int difficultyLevel{};
 public:
+    Game(Player player, int dLevel)
+        :m_player{player}
+    {
+        switch (dLevel)
+        {
+        case 1:
+            player.changeHealth(player.getHealth(), true);
+            break;
+        case 2:
+            break;
+        case 3:
+            player.changeHealth(player.getHealth() / 2, false);
+            break;
+        }
+    }
+    
     Player& getPlayer()
     {
         return m_player;
@@ -64,10 +89,7 @@ public:
 };
 
 
-class Model
-{
 
-};
 
 // Объявление класса и реализация элементарных методов
 
@@ -128,7 +150,7 @@ public:
 
     void render(Game&) const;
 
-    void move(Game&, std::array<double, 3>);
+    void move(std::array<double, 3>);
 
     void attack(Game&) const;
 

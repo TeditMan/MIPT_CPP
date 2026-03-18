@@ -87,6 +87,7 @@ Monster& Monster::operator=(const Monster& other)
     m_model = other.getModel();
     m_type = other.getType();
     m_state = other.getState();
+    return *this;
 }
 
 void Monster::changeState(Game& game)
@@ -112,7 +113,7 @@ void Monster::attack(Game& game) const
     game.getPlayer().changeHealth(m_damage, 0);
 }
 
-void Monster::move(Game& game, std::array<double, 3> direction)
+void Monster::move(std::array<double, 3> direction)
 {
     m_pos[0] += m_movementSpeed * direction[0];
     m_pos[1] += m_movementSpeed * direction[1];
