@@ -1,5 +1,6 @@
 #pragma once
 #include <array>
+#include <iostream>
 
 // Выбранный объект - противник в рамках какой-нибудь игры (например, Witcher 3)
 // Основной функционал - взаимодействие с игроком (нанесение урона, изменение состояния в зависимости от относительного расположения с игроком),
@@ -28,8 +29,33 @@ class Player
 private:
     std::array<double, 3> m_pos{};
     int m_health{100};
+    int m_damage{ 10 };
 
 public:
+    Player& operator+=(int value)
+    {
+        m_health += value;
+        return *this;
+    }
+
+    Player& operator-=(int value)
+    {
+        m_health -= value;
+        return *this;
+    }
+
+    Player& operator*=(int value)
+    {
+        m_health *= value;
+        return *this;
+    }
+
+    Player& operator/=(int value)
+    {
+        m_health /= value;
+        return *this;
+    }
+
     std::array<double, 3> getPos() const
     {
         return m_pos;
@@ -39,20 +65,7 @@ public:
     {
         return m_health;
     }
-
-    void changeHealth(int value, bool add)
-    {
-        if (add)
-        {
-            m_health += value;
-        }
-        else
-        {
-            m_health -= value;
-        }
-    }
 };
-
 
 class Game
 {
@@ -60,19 +73,19 @@ private:
     Player m_player{};
 
     int difficultyLevel{};
+
 public:
-    Game(Player player, int dLevel)
-        :m_player{player}
+    Game(int dLevel)
     {
         switch (dLevel)
         {
         case 1:
-            player.changeHealth(player.getHealth(), true);
+            m_player *= 2;
             break;
         case 2:
             break;
         case 3:
-            player.changeHealth(player.getHealth() / 2, false);
+            m_player /= 2;
             break;
         }
     }
@@ -80,6 +93,11 @@ public:
     Player& getPlayer()
     {
         return m_player;
+    }
+
+    void printPlayer()
+    {
+        std::cout << "Player health: " << m_player.getHealth() << "\n\n";
     }
 
     void render(Model)
@@ -190,5 +208,17 @@ public:
     {
         return m_pos;
     }
+
+    Monster& operator+=(int value);
+
+    Monster& operator-=(int value);
+
+    Monster& operator*=(int value);
+
+    Monster& operator/=(int value);
+
+    
+    friend std::ostream& operator<<(std::ostream& out, const Monster& monster);
+
 
 };

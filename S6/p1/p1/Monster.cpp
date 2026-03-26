@@ -1,6 +1,8 @@
 #include "Monster.h"
 #include <cmath>
+#include <iostream>
 
+// техническая функция
 bool distanceLessThan(std::array<double, 3> a, std::array<double, 3> b, double condition)
 {
     double distance{ std::pow(std::pow(a[0] - b[0], 2) + std::pow(a[1] - b[1], 2) + std::pow(a[2] - b[2], 2), 2) };
@@ -11,6 +13,8 @@ bool distanceLessThan(std::array<double, 3> a, std::array<double, 3> b, double c
     return false;
 }
 
+
+// конструктор
 Monster::Monster(Monster::Type type, std::array<double, 3>) :
     m_type{ type }
 {
@@ -67,6 +71,7 @@ Monster::Monster(Monster::Type type, std::array<double, 3>) :
     }
 }
 
+// конструктор копирования
 Monster::Monster(const Monster& other)
 {
     m_health = other.getHealth();
@@ -78,18 +83,23 @@ Monster::Monster(const Monster& other)
     m_state = other.getState();
 }
 
+// конструктор оператора копирования
 Monster& Monster::operator=(const Monster& other)
 {
-    m_health = other.getHealth();
-    m_damage = other.getDamage();
-    m_pos = other.getPos();
-    m_movementSpeed = other.getMS();
-    m_model = other.getModel();
-    m_type = other.getType();
-    m_state = other.getState();
+    if (this != &other)
+    {
+        m_health = other.getHealth();
+        m_damage = other.getDamage();
+        m_pos = other.getPos();
+        m_movementSpeed = other.getMS();
+        m_model = other.getModel();
+        m_type = other.getType();
+        m_state = other.getState();
+    }
     return *this;
 }
 
+// изменение состояния 
 void Monster::changeState(Game& game)
 {
     if (distanceLessThan(m_pos, game.getPlayer().getPos(), m_alarmDistance))
@@ -108,11 +118,14 @@ void Monster::changeState(Game& game)
     }
 }
 
+// атака(нанесение урона игроку)
 void Monster::attack(Game& game) const
 {
-    game.getPlayer().changeHealth(m_damage, 0);
+    std::cout << "Monster deals " << m_damage << " to the player \n\n";
+    game.getPlayer() -= m_damage;
 }
 
+// смена позиции
 void Monster::move(std::array<double, 3> direction)
 {
     m_pos[0] += m_movementSpeed * direction[0];
@@ -120,10 +133,77 @@ void Monster::move(std::array<double, 3> direction)
     m_pos[2] += m_movementSpeed * direction[2];
 }
 
+// отрендерить
 void Monster::render(Game& game) const
 {
     if (distanceLessThan(game.getPlayer().getPos(), m_pos, m_renderDistance))
     {
         game.render(m_model);
     }
+}
+
+// перегрузка операторов
+
+Monster& Monster::operator+=(int value)
+{
+    m_health += value;
+    return *this;
+}
+
+Monster& Monster::operator-=(int value)
+{
+    m_health -= value;
+    return *this;
+}
+
+Monster& Monster::operator*=(int value)
+{
+    m_health *= value;
+    return *this;
+}
+
+Monster& Monster::operator/=(int value)
+{
+    m_health /= value;
+    return *this;
+}
+
+std::ostream& operator<<(std::ostream& out, const Monster& monster)
+{
+    out << "Monster type: ";
+
+    switch (monster.m_type)
+    {
+    case Monster::drowner:
+        out << "drowner";
+        break;
+    case Monster::ghoul:
+        out << "ghoul";
+        break;
+    case Monster::troll:
+        out << "troll";
+        break;
+    case Monster::wraith:
+        out << "wraith";
+        break;
+    case Monster::golem:
+        out << "golem";
+        break;
+    case Monster::wyvern:
+        out << "wyvern";
+        break;
+    case Monster::barghest:
+        out << "barghest";
+        break;
+    case Monster::werewolf:
+        out << "werewolf";
+        break;
+    }
+    
+    out << "\n" << "Current health: " << monster.m_health << '\n'
+        << "Damage amount: " << monster.m_damage << '\n'
+        << "Movement speed: " << monster.m_movementSpeed << '\n'
+        << "State: " << monster.m_state << "\n\n";
+
+    return out;
 }
