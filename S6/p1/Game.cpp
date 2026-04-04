@@ -273,7 +273,7 @@ void Game::run()
 						{
 							m_player >> monster;
 							std::cout << monster.getName() << " receives " << m_player.m_damage << " damage.\n";
-							if (monster.m_health < 0)
+							if (monster.m_health <= 0)
 							{
 								std::cout << monster.getName() << " is eliminated.\n";
 								monster.m_char = 'X';
@@ -398,7 +398,7 @@ void Game::run()
 			std::cout << "\n\nAll enemies are dead.\n";
 			done = true;
 		}
-		if (m_player.m_health < 0)
+		if (m_player.m_health <= 0)
 		{
 			render();
 			std::cout << "\n\nYou are dead.\n";
